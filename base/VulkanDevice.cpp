@@ -134,6 +134,10 @@ namespace vks
 			for (uint32_t i = 0; i < static_cast<uint32_t>(queueFamilyProperties.size()); i++)
 			{
 				// if current queueFamilyProperties' queueflags contains compute bit and does not contains graphics bit then return it
+				if ((queueFamilyProperties[i].queueFlags & VK_QUEUE_COMPUTE_BIT) && ((queueFamilyProperties[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) == 0))
+				{
+					return i;
+				}
 			}
 		}
 
@@ -211,7 +215,7 @@ namespace vks
 				// If compute family index differs, we need an additional queue create info for the compute queue
 				VkDeviceQueueCreateInfo queueInfo{};
 				queueInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-				queueInfo.queueFamilyIndex = ??;
+				queueInfo.queueFamilyIndex = queueFamilyIndices.compute;
 				queueInfo.queueCount = 1;
 				queueInfo.pQueuePriorities = &defaultQueuePriority;
 				queueCreateInfos.push_back(queueInfo);
